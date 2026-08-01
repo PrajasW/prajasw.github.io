@@ -1,0 +1,3318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>prajas.ipynb — JupyterLab</title>
+  <link rel="icon" href="assets/favicon-notebook.svg" type="image/svg+xml" />
+  <script src="assets/theme.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f5f5;
+      --chrome: #fafafa;
+      --chrome-border: #dcdcdc;
+      --paper: #ffffff;
+      --panel: #ffffff;
+      --panel-soft: #fafafa;
+      --hover: #eeeeee;
+      --ink: #212121;
+      --muted: #616161;
+      --faint: #9e9e9e;
+      --rule: #e0e0e0;
+      --rule-strong: #bdbdbd;
+      --selected: #4a5a78;
+      --selected-soft: rgba(74, 90, 120, 0.08);
+      --link: #2196f3;
+      --code-bg: #f7f7f7;
+      --in: #307fc1;
+      --out: #d14;
+      --mark-bg: rgba(74, 90, 120, 0.12);
+      --accent: #b45309;
+      --ok: #388e3c;
+      --warn: #f57c00;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      /* syntax */
+      --kw: #a626a4;
+      --fn: #0f766e;
+      --str: #50a14f;
+      --num: #986801;
+      --com: #a0a1a7;
+      --op: #383a42;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101316;
+      --chrome: #171a1f;
+      --chrome-border: #2b3037;
+      --paper: #15181d;
+      --panel: #1b1f25;
+      --panel-soft: #20252c;
+      --hover: #252b33;
+      --ink: #e8e4dc;
+      --muted: #aaa49b;
+      --faint: #737b84;
+      --rule: #303640;
+      --rule-strong: #4a535e;
+      --selected: #4a5a78;
+      --selected-soft: rgba(74, 90, 120, 0.14);
+      --link: #8fc0ff;
+      --code-bg: #1d2228;
+      --in: #8ab4f8;
+      --out: #f08aa3;
+      --mark-bg: rgba(127, 181, 246, 0.14);
+      --accent: #f2b76b;
+      --ok: #72c87b;
+      --warn: #ffb55f;
+      --kw: #d7a3ff;
+      --fn: #77d8c8;
+      --str: #9ad88f;
+      --num: #e3c06f;
+      --com: #7e8791;
+      --op: #d8d3ca;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------------------------------------------------------------
+     JupyterLab-style chrome
+  ----------------------------------------------------------------- */
+    .menubar {
+      display: flex;
+      align-items: center;
+      height: 28px;
+      background: var(--chrome);
+      border-bottom: 1px solid var(--chrome-border);
+      padding: 0 10px;
+      font-size: 12px;
+      user-select: none;
+    }
+
+    .menubar .app {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      margin-right: 14px;
+      color: #333;
+    }
+
+    .menubar .app .logo {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #f37626 0%, #ff8c42 100%);
+    }
+
+    .menubar .menu {
+      padding: 0 8px;
+      color: #424242;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+    }
+
+    .menubar .menu:hover {
+      background: #eeeeee;
+      color: #111;
+    }
+
+    .menubar .spacer {
+      flex: 1;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 22px;
+      margin-right: 8px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: var(--hover);
+      border-color: var(--chrome-border);
+      color: var(--ink);
+    }
+
+    .theme-toggle .theme-icon {
+      position: relative;
+      display: block;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      box-shadow: inset -4px -2px 0 currentColor;
+    }
+
+    .theme-toggle[data-theme-state="dark"] .theme-icon {
+      width: 10px;
+      height: 10px;
+      background: currentColor;
+      box-shadow:
+        0 -7px 0 -4px currentColor,
+        0 7px 0 -4px currentColor,
+        7px 0 0 -4px currentColor,
+        -7px 0 0 -4px currentColor,
+        5px 5px 0 -4px currentColor,
+        -5px 5px 0 -4px currentColor,
+        5px -5px 0 -4px currentColor,
+        -5px -5px 0 -4px currentColor;
+    }
+
+    .menubar .kernel {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      color: var(--muted);
+      font-size: 11.5px;
+      border-left: 1px solid var(--chrome-border);
+      height: 100%;
+    }
+
+    .kernel .kdot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 2px rgba(56, 142, 60, 0.15);
+      transition: all .2s ease;
+    }
+
+    .kernel.busy .kdot {
+      background: var(--warn);
+      box-shadow: 0 0 0 2px rgba(245, 124, 0, 0.15);
+      animation: pulse 0.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      50% {
+        transform: scale(1.3);
+      }
+    }
+
+    /* Tab bar */
+    .tabbar {
+      display: flex;
+      align-items: stretch;
+      background: var(--chrome);
+      border-bottom: 1px solid var(--chrome-border);
+      height: 28px;
+      padding-left: 6px;
+    }
+
+    .tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      font-size: 12px;
+      background: var(--paper);
+      border: 1px solid var(--chrome-border);
+      border-bottom: none;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      margin-top: 3px;
+      color: #333;
+    }
+
+    .tab .notebook-icon {
+      color: #f37626;
+      font-weight: 700;
+    }
+
+    .tab .dot {
+      color: var(--muted);
+    }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 32px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--chrome-border);
+      padding: 0 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .toolbar .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 22px;
+      border-radius: 3px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toolbar .btn:hover {
+      background: #eeeeee;
+      color: var(--ink);
+    }
+
+    .toolbar .sep {
+      width: 1px;
+      height: 18px;
+      background: var(--chrome-border);
+      margin: 0 4px;
+    }
+
+    .toolbar .celltype {
+      height: 22px;
+      padding: 0 8px;
+      border: 1px solid var(--chrome-border);
+      border-radius: 3px;
+      font-size: 12px;
+      background: #fff;
+      color: var(--ink);
+      margin-left: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toolbar .spacer {
+      flex: 1;
+    }
+
+    .toolbar .hint {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .toolbar .hint kbd {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      background: #f0f0f0;
+      border: 1px solid var(--chrome-border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin: 0 2px;
+    }
+
+    /* Notebook body */
+    .page {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      height: calc(100vh - 28px - 28px - 32px - 20px);
+    }
+
+    .sidebar {
+      background: var(--paper);
+      border-right: 1px solid var(--chrome-border);
+      overflow-y: auto;
+      font-size: 12px;
+    }
+
+    .sidebar .side-head {
+      padding: 10px 12px;
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .sidebar .toc-item {
+      padding: 7px 14px;
+      border-left: 2px solid transparent;
+      cursor: pointer;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sidebar .toc-item:hover {
+      background: #f4f4f4;
+    }
+
+    .sidebar .toc-item.active {
+      border-left-color: var(--selected);
+      background: var(--selected-soft);
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .sidebar .toc-item .n {
+      font-family: var(--mono);
+      color: var(--faint);
+      font-size: 11px;
+      min-width: 22px;
+    }
+
+    .sidebar .idcard {
+      margin: 14px 12px;
+      padding: 12px;
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .sidebar .idcard .name {
+      font-weight: 600;
+      font-size: 13.5px;
+      margin-bottom: 2px;
+    }
+
+    .sidebar .idcard .role {
+      color: var(--muted);
+      font-size: 11.5px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar .idcard .role a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule-strong);
+    }
+
+    .sidebar .idcard .role a:hover {
+      color: var(--selected);
+      border-bottom-color: var(--selected);
+    }
+
+    .sidebar .idcard .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .sidebar .idcard .links a {
+      font-size: 11px;
+      padding: 2px 7px;
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      color: #333;
+      text-decoration: none;
+      background: #fff;
+    }
+
+    .sidebar .idcard .links a:hover {
+      border-color: var(--selected);
+      color: var(--selected);
+    }
+
+    .nb {
+      overflow-y: auto;
+      padding: 22px 36px 100px;
+      background: var(--paper);
+    }
+
+    .nb-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Cell */
+    .cell {
+      position: relative;
+      margin: 8px 0;
+      border: 1px solid transparent;
+      border-left: 3px solid transparent;
+      border-radius: 3px;
+      padding: 4px 0 4px 0;
+      transition: border-color .15s ease, background-color .15s ease;
+    }
+
+    .cell.selected {
+      border-color: var(--selected);
+      background: var(--selected-soft);
+    }
+
+    .cell.running {
+      border-left-color: var(--warn);
+    }
+
+    .cell .row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .cell .prompt {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--faint);
+      text-align: right;
+      padding-top: 8px;
+      user-select: none;
+    }
+
+    .cell .prompt.in {
+      color: var(--in);
+    }
+
+    .cell .prompt.out {
+      color: var(--out);
+    }
+
+    .cell-mobile-actions {
+      display: none;
+    }
+
+    /* Code area */
+    .cell .code-wrap {
+      background: var(--code-bg);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 6px 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      overflow-wrap: normal;
+      word-break: normal;
+      tab-size: 4;
+      outline: none;
+    }
+
+    .cell.selected .code-wrap {
+      border-color: var(--rule-strong);
+    }
+
+    .cell.running .code-wrap {
+      border-color: var(--warn);
+      box-shadow: 0 0 0 1px rgba(245, 124, 0, 0.15) inset;
+    }
+
+    .cell .code-wrap:focus {
+      border-color: var(--selected);
+    }
+
+    /* Syntax tokens */
+    .tok-kw {
+      color: var(--kw);
+    }
+
+    .tok-fn {
+      color: var(--fn);
+      font-weight: 600;
+    }
+
+    .tok-str {
+      color: var(--str);
+    }
+
+    .tok-num {
+      color: var(--num);
+    }
+
+    .tok-com {
+      color: var(--com);
+      font-style: italic;
+    }
+
+    .tok-op {
+      color: var(--op);
+    }
+
+    /* Output area */
+    .cell .out-row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 24px;
+      align-items: flex-start;
+      margin-top: 4px;
+      margin-left: -100px;
+      width: calc(100% + 100px);
+    }
+
+    .cell .out-row .prompt {
+      padding-top: 4px;
+    }
+
+    .cell .out-wrap {
+      margin-top: 4px;
+      padding: 4px 10px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink);
+      overflow-x: auto;
+    }
+
+    /* Markdown cell */
+    .cell.md .row {
+      grid-template-columns: 76px 1fr;
+    }
+
+    .cell.md .prompt {
+      visibility: hidden;
+    }
+
+    .cell.md .md-body {
+      padding: 2px 10px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink);
+      cursor: text;
+    }
+
+    .cell.md.locked .md-body {
+      cursor: default;
+    }
+
+    .cell.md .md-edit {
+      display: block;
+      width: 100%;
+      min-height: 80px;
+      padding: 8px 10px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--code-bg);
+      border: 1px solid var(--rule-strong);
+      border-radius: 3px;
+      outline: none;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+
+    .cell.md .md-edit:focus {
+      border-color: var(--selected);
+    }
+
+    .cell.md.editing .md-body {
+      display: none;
+    }
+
+    .cell.md:not(.editing) .md-edit {
+      display: none;
+    }
+
+    .md-body h1 {
+      font-family: var(--sans);
+      font-size: 30px;
+      font-weight: 700;
+      margin: 6px 0 4px;
+      letter-spacing: 0;
+    }
+
+    .md-body h2 {
+      font-family: var(--sans);
+      font-size: 20px;
+      font-weight: 600;
+      margin: 10px 0 4px;
+    }
+
+    .md-body .sub {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .md-body .sub a {
+      color: var(--selected);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .md-body .sub a:hover {
+      text-decoration: underline;
+    }
+
+    .md-body .id-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 14px 0 8px;
+    }
+
+    .md-body .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--rule-strong);
+    }
+
+    .md-body .id-row .meta {
+      min-width: 0;
+    }
+
+    .md-body .id-row .aff,
+    .md-body .id-row .links-inline {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .md-body .id-row .links-inline {
+      margin-top: 4px;
+    }
+
+    .md-body .id-row .links-inline a {
+      color: var(--selected);
+      text-decoration: none;
+      border: none;
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .md-body .id-row .links-inline a:hover {
+      text-decoration: underline;
+    }
+
+    .md-body .id-row .links-inline .sep {
+      color: var(--faint);
+    }
+
+    .md-body p {
+      margin: 8px 0;
+    }
+
+    .md-body code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      background: var(--code-bg);
+      padding: 1px 5px;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+    }
+
+    .md-body a {
+      color: var(--selected);
+      text-decoration: none;
+    }
+
+    .md-body a:hover {
+      text-decoration: underline;
+    }
+
+    /* ============= OUTPUTS ============= */
+
+    /* Generic text output */
+    .out-text {
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: pre-wrap;
+      color: var(--ink);
+    }
+
+    /* DataFrame */
+    table.df {
+      border-collapse: collapse;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      background: #fff;
+      margin: 2px 0;
+    }
+
+    table.df th,
+    table.df td {
+      padding: 5px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+
+    table.df thead th {
+      font-weight: 600;
+      background: #fafafa;
+      border-bottom: 2px solid var(--rule-strong);
+      position: sticky;
+      top: 0;
+    }
+
+    table.df tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    table.df .idx {
+      color: var(--faint);
+      text-align: right;
+    }
+
+    table.df .pill {
+      display: inline-block;
+      padding: 1px 7px;
+      font-size: 10.5px;
+      letter-spacing: 0.05em;
+      border-radius: 999px;
+      background: #eeeeee;
+      color: #444;
+    }
+
+    table.df .pill.award {
+      background: rgba(180, 83, 9, 0.12);
+      color: var(--accent);
+    }
+
+    table.df a {
+      color: var(--selected);
+    }
+
+    .df-caption {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .interest-note {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink);
+      margin: 0 0 10px;
+    }
+
+    .interest-dict {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .interest-dict .row {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+    }
+
+    .interest-dict .key {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--fn);
+      white-space: nowrap;
+    }
+
+    .interest-dict .value {
+      min-width: 0;
+    }
+
+    .interest-dict .field {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .interest-dict .field:first-child {
+      margin-top: 0;
+    }
+
+    .interest-dict .label {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .interest-dict .text {
+      font-family: var(--sans);
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+
+    .paper-list-note {
+      font-family: var(--sans);
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+
+    .paper-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .paper-item {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 16px;
+    }
+
+    .paper-item .year {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 2px;
+    }
+
+    .paper-item .title {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.45;
+      color: var(--ink);
+      margin: 0 0 4px;
+    }
+
+    .paper-item .authors,
+    .paper-item .venue {
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin: 0 0 3px;
+    }
+
+    .paper-item .award {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(180, 83, 9, 0.12);
+      color: var(--accent);
+      font-family: var(--sans);
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .paper-item .links {
+      margin-top: 6px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+    }
+
+    .paper-item .links a {
+      color: var(--selected);
+      text-decoration: none;
+      margin-right: 12px;
+    }
+
+    .paper-item .links a:hover {
+      text-decoration: underline;
+    }
+
+    .experience-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+
+
+
+    .github-link {
+      color: var(--muted);
+      opacity: 0.6;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .github-link:hover {
+      opacity: 1;
+      color: var(--fn);
+    }
+
+    .github-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0;
+    }
+
+    .tech-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--faint);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .experience-entry {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 12px;
+    }
+
+    .project-entry {
+      grid-template-columns: 90px 1fr;
+    }
+
+    .github-link:hover {
+      opacity: 1 !important;
+      color: var(--fn) !important;
+    }
+
+    .experience-entry .when {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      padding-top: 2px;
+    }
+
+    .experience-entry .role {
+      margin: 0 0 2px;
+      font-family: var(--sans);
+      font-size: 15.5px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+
+    .experience-entry .org {
+      margin: 0 0 2px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .experience-entry .advisor {
+      margin: 0 0 6px;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--faint);
+    }
+
+    .experience-entry .summary {
+      margin: 4px 0 0;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    .experience-entry .bullets {
+      margin: 6px 0 0;
+      padding-left: 20px;
+      list-style-position: outside;
+      color: var(--ink);
+    }
+
+    .experience-entry .bullets li {
+      margin: 0 0 6px;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      line-height: 1.8;
+    }
+
+    .experience-entry .bullets li.pub {
+      list-style: none;
+      margin-left: -18px;
+      padding: 8px 10px;
+      border: 1px solid rgba(180, 83, 9, 0.18);
+      border-radius: 6px;
+      background: rgba(180, 83, 9, 0.06);
+    }
+
+    .experience-entry .pub-label {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(180, 83, 9, 0.12);
+      color: var(--accent);
+      font-family: var(--sans);
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .garden-preview {
+      display: grid;
+      gap: 10px;
+    }
+
+    .garden-preview-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .garden-preview-card {
+      display: block;
+      min-height: 112px;
+      padding: 10px 11px 11px;
+      border: 1px solid var(--rule);
+      border-top: 3px solid rgba(74, 90, 120, 0.28);
+      border-radius: 6px 6px 4px 4px;
+      background: #fff;
+    }
+
+    a.garden-preview-card {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a.garden-preview-card:hover {
+      background: rgba(74, 90, 120, 0.035);
+      border-color: rgba(74, 90, 120, 0.28);
+    }
+
+    .garden-preview-card .tab-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .garden-preview-card .tab-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .garden-preview-card .mini-flower {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+    }
+
+    .garden-preview-card .kind {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 1px 6px;
+      background: #fafafa;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .garden-preview-card .meta {
+      min-width: 0;
+    }
+
+    .garden-preview-card .date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .garden-preview-card .title {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--ink);
+      margin: 0 0 4px;
+    }
+
+    .garden-preview-card .desc {
+      font-family: var(--sans);
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--muted);
+      margin: 0;
+      max-height: 3.1em;
+      overflow: hidden;
+    }
+
+    .garden-preview-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 2px;
+    }
+
+    .garden-preview-footer .seedling {
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .garden-preview-link {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--selected);
+      text-decoration: none;
+    }
+
+    .garden-preview-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Plot caption */
+    .plot-head {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--faint);
+      margin-bottom: 4px;
+    }
+
+    .plot-figure {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 10px;
+    }
+
+    /* Agent output */
+    .agent-box {
+      background: #fff;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 10px 12px;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      min-height: 28px;
+    }
+
+    .agent-box .tool {
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--muted);
+      background: #f7f7f7;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 4px 8px;
+      margin: 4px 0;
+      display: block;
+    }
+
+    .agent-box .tool .tk {
+      color: var(--kw);
+    }
+
+    .agent-box .links {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+
+    .agent-box .links a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    .agent-box .links a:hover {
+      text-decoration: underline;
+    }
+
+    .agent-box .suggestions {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+
+    .agent-box .suggestions button {
+      border: 1px solid var(--rule);
+      background: #f7f7f7;
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .agent-box .suggestions button:hover {
+      background: #eeeeee;
+      border-color: var(--rule-strong);
+    }
+
+    .agent-box .detail-toggle {
+      display: inline-flex;
+      margin-top: 10px;
+      border: 1px solid var(--rule);
+      background: #fff;
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      padding: 5px 9px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .agent-box .detail-toggle:hover {
+      color: var(--ink);
+      border-color: var(--rule-strong);
+      background: #f7f7f7;
+    }
+
+    .agent-box .detail-row {
+      display: block;
+      margin-top: 10px;
+      white-space: normal;
+    }
+
+    .agent-results {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .agent-results .agent-render {
+      white-space: normal;
+    }
+
+    .out-text a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    .out-text a:hover {
+      text-decoration: underline;
+    }
+
+    .agent-box .caret {
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      background: var(--ink);
+      vertical-align: -2px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .about-card {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .about-card .avatar-large {
+      width: 108px;
+      height: 108px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid var(--rule-strong);
+    }
+
+    .about-card .about-copy {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .about-card .about-copy .obj {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      margin-bottom: 6px;
+    }
+
+    .about-card .about-copy p {
+      margin: 0 0 10px;
+    }
+
+    /* Garden */
+    .garden-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .flower {
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .flower svg {
+      width: 56px;
+      height: 56px;
+    }
+
+    .flower .title {
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .flower .date {
+      font-size: 10.5px;
+      color: var(--muted);
+      font-family: var(--mono);
+    }
+
+    .flower.seed .title {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Status bar */
+    .statusbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 12px;
+      font-size: 11px;
+      background: var(--chrome);
+      border-top: 1px solid var(--chrome-border);
+      color: var(--muted);
+      z-index: 10;
+    }
+
+    .statusbar .sep {
+      color: var(--faint);
+    }
+
+    .statusbar .mode {
+      padding: 0 6px;
+      border-radius: 3px;
+      background: #eceff1;
+      color: #333;
+      font-family: var(--mono);
+      font-size: 10.5px;
+    }
+
+    /* Insert cell separator (JupyterLab style) */
+    .insert-rail {
+      position: relative;
+      height: 8px;
+      margin: -2px 0;
+    }
+
+    .insert-rail button {
+      position: absolute;
+      left: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid var(--rule);
+      background: #fff;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .15s ease;
+    }
+
+    .insert-rail:hover button {
+      opacity: 1;
+    }
+
+    .insert-rail.last {
+      height: 34px;
+      margin: 10px 0 18px;
+    }
+
+    .insert-rail.last button {
+      width: 26px;
+      height: 26px;
+      opacity: 1;
+      border-color: var(--selected);
+      color: var(--selected);
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(74, 90, 120, 0.12);
+    }
+
+    .insert-rail.last::before {
+      content: '';
+      position: absolute;
+      left: 84px;
+      right: 0;
+      top: 50%;
+      border-top: 1px dashed var(--rule-strong);
+      transform: translateY(-50%);
+    }
+
+    /* Add-cell menu */
+    .add-menu {
+      position: fixed;
+      z-index: 30;
+      min-width: 156px;
+      background: #fff;
+      border: 1px solid var(--chrome-border);
+      border-radius: 6px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+      padding: 6px;
+      display: none;
+    }
+
+    .add-menu.show {
+      display: block;
+    }
+
+    .add-menu button {
+      display: block;
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      padding: 8px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .add-menu button:hover {
+      background: var(--selected-soft);
+      color: var(--selected);
+    }
+
+    .add-menu .kind {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      margin-left: 6px;
+    }
+
+    /* Help overlay */
+    .help {
+      position: fixed;
+      right: 16px;
+      bottom: 30px;
+      background: #263238;
+      color: #eceff1;
+      padding: 10px 24px 10px 14px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      line-height: 1.7;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      max-width: 260px;
+      z-index: 20;
+      transform: translateY(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all .2s ease;
+    }
+
+    .help.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .help kbd {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      padding: 0 5px;
+      margin: 0 2px;
+    }
+
+    .help .x {
+      position: absolute;
+      top: 4px;
+      right: 8px;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .help .x:hover {
+      opacity: 1;
+    }
+
+    html[data-theme="dark"] .menubar .app,
+    html[data-theme="dark"] .tab,
+    html[data-theme="dark"] .sidebar .toc-item,
+    html[data-theme="dark"] .sidebar .idcard .links a,
+    html[data-theme="dark"] .statusbar .mode {
+      color: var(--ink);
+    }
+
+    html[data-theme="dark"] .menubar .menu {
+      color: var(--muted);
+    }
+
+    html[data-theme="dark"] .menubar .menu:hover,
+    html[data-theme="dark"] .toolbar .btn:hover,
+    html[data-theme="dark"] .sidebar .toc-item:hover,
+    html[data-theme="dark"] table.df tbody tr:hover,
+    html[data-theme="dark"] .agent-box .suggestions button:hover,
+    html[data-theme="dark"] .agent-box .detail-toggle:hover,
+    html[data-theme="dark"] .add-menu button:hover {
+      background: var(--hover);
+      color: var(--ink);
+    }
+
+    html[data-theme="dark"] .toolbar .celltype,
+    html[data-theme="dark"] table.df,
+    html[data-theme="dark"] .garden-preview-card,
+    html[data-theme="dark"] .plot-figure,
+    html[data-theme="dark"] .agent-box,
+    html[data-theme="dark"] .flower,
+    html[data-theme="dark"] .add-menu,
+    html[data-theme="dark"] .insert-rail button,
+    html[data-theme="dark"] .insert-rail.last button {
+      background: var(--panel);
+    }
+
+    html[data-theme="dark"] .sidebar .idcard,
+    html[data-theme="dark"] table.df thead th,
+    html[data-theme="dark"] table.df .pill,
+    html[data-theme="dark"] .garden-preview-card .kind,
+    html[data-theme="dark"] .agent-box .tool,
+    html[data-theme="dark"] .agent-box .suggestions button,
+    html[data-theme="dark"] .agent-box .detail-toggle,
+    html[data-theme="dark"] .statusbar .mode,
+    html[data-theme="dark"] .toolbar .hint kbd {
+      background: var(--panel-soft);
+    }
+
+    html[data-theme="dark"] .sidebar .idcard .links a {
+      background: var(--paper);
+    }
+
+    html[data-theme="dark"] .garden-preview-card:hover {
+      background: rgba(74, 90, 120, 0.08);
+      border-color: rgba(74, 90, 120, 0.35);
+    }
+
+    html[data-theme="dark"] table.df .pill {
+      color: var(--ink);
+    }
+
+    html[data-theme="dark"] .add-menu {
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .nb {
+        padding: 16px 16px 100px;
+      }
+
+      .cell .row {
+        grid-template-columns: 56px 1fr;
+      }
+
+      .md-body h1 {
+        font-size: 26px;
+      }
+
+      .about-card {
+        grid-template-columns: 1fr;
+      }
+
+      .about-card .avatar-large {
+        width: 96px;
+        height: 96px;
+      }
+
+      .garden-preview-list {
+        grid-template-columns: 1fr;
+      }
+
+      .garden-preview-card {
+        min-height: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+
+      html,
+      body {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-size: 13px;
+      }
+
+      .menubar {
+        height: 38px;
+        padding: 0 8px;
+        gap: 4px;
+      }
+
+      .menubar .app {
+        margin-right: 4px;
+        min-width: 0;
+      }
+
+      .menubar .menu {
+        display: none;
+      }
+
+      .theme-toggle {
+        width: 32px;
+        height: 30px;
+        margin-right: 4px;
+        flex: 0 0 auto;
+      }
+
+      .menubar .kernel {
+        padding: 0 7px;
+        border-left: 0;
+        font-size: 0;
+        flex: 0 0 auto;
+      }
+
+      .menubar .kernel #kernel-label {
+        display: none;
+      }
+
+      .tabbar {
+        height: 30px;
+        padding-left: 6px;
+        overflow: hidden;
+      }
+
+      .tab {
+        max-width: calc(100vw - 12px);
+        min-width: 0;
+        padding: 0 10px;
+      }
+
+      .toolbar {
+        height: 40px;
+        padding: 0 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 6px;
+      }
+
+      .toolbar .btn {
+        width: 34px;
+        height: 30px;
+        flex: 0 0 auto;
+        border: 1px solid var(--chrome-border);
+        background: var(--panel);
+      }
+
+      .toolbar .sep,
+      .toolbar .celltype,
+      .toolbar .hint {
+        display: none;
+      }
+
+      .page {
+        display: block;
+        height: auto;
+        min-height: calc(100vh - 108px);
+      }
+
+      .nb {
+        min-height: calc(100vh - 108px);
+        overflow: visible;
+        padding: 12px 10px 44px;
+      }
+
+      .nb-inner {
+        max-width: none;
+        width: 100%;
+      }
+
+      .cell {
+        margin: 10px 0 14px;
+        border-left-width: 2px;
+        border-radius: 6px;
+        padding: 0;
+      }
+
+      .cell .row,
+      .cell.md .row {
+        display: block;
+      }
+
+      .cell .prompt {
+        display: none;
+      }
+
+      .cell-mobile-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 2px 0 6px;
+      }
+
+      .cell-mobile-actions .cell-kind {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--faint);
+        text-transform: uppercase;
+        letter-spacing: 0;
+      }
+
+      .cell-run {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 74px;
+        height: 32px;
+        border: 1px solid var(--rule-strong);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--selected);
+        font-family: var(--sans);
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .cell-run:disabled {
+        color: var(--muted);
+        cursor: wait;
+        opacity: 0.78;
+      }
+
+      .cell .code-wrap {
+        min-height: 44px;
+        padding: 10px 11px;
+        font-size: 12.5px;
+        line-height: 1.6;
+        white-space: pre;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 6px;
+      }
+
+      .cell .out-row {
+        display: block;
+        margin-left: 0;
+        width: auto;
+        margin-top: 8px;
+      }
+
+      .cell .out-wrap {
+        padding: 3px 0 0;
+        font-size: 13px;
+        line-height: 1.6;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .cell.md .md-body {
+        padding: 0;
+        font-size: 13.5px;
+        line-height: 1.65;
+      }
+
+      .cell.md .md-edit {
+        font-size: 12.5px;
+        border-radius: 6px;
+      }
+
+      .md-body h1 {
+        font-size: 25px;
+        line-height: 1.16;
+      }
+
+      .md-body h2 {
+        font-size: 18px;
+        line-height: 1.25;
+      }
+
+      .md-body .sub {
+        font-size: 15px;
+      }
+
+      .md-body .id-row {
+        display: block;
+        margin: 10px 0 6px;
+      }
+
+      .md-body .id-row .links-inline,
+      .md-body .id-row .aff {
+        font-size: 13px;
+      }
+
+      .interest-dict .row,
+      .paper-item,
+      .experience-entry {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 12px;
+      }
+
+      .interest-dict .field {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .experience-entry .bullets li.pub {
+        margin-left: -18px;
+      }
+
+      table.df {
+        min-width: 620px;
+      }
+
+      .agent-box {
+        padding: 10px;
+        font-size: 13px;
+      }
+
+      .md-body,
+      .out-text,
+      .agent-box,
+      .about-card .about-copy,
+      .paper-item,
+      .experience-entry,
+      .interest-dict {
+        overflow-wrap: break-word;
+        word-break: normal;
+      }
+
+      .out-text a,
+      .agent-box a,
+      .md-body a {
+        overflow-wrap: anywhere;
+      }
+
+      .agent-box .suggestions button {
+        min-height: 32px;
+        touch-action: manipulation;
+      }
+
+      .plot-figure {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .insert-rail {
+        height: 18px;
+        margin: 0;
+      }
+
+      .insert-rail button {
+        left: 0;
+        width: 28px;
+        height: 28px;
+        opacity: 1;
+        background: var(--panel);
+        touch-action: manipulation;
+      }
+
+      .insert-rail.last::before {
+        left: 38px;
+      }
+
+      .add-menu {
+        position: fixed;
+        left: 10px !important;
+        right: 10px;
+        width: auto;
+        max-width: none;
+      }
+
+      .statusbar,
+      .help {
+        display: none;
+      }
+    }
+  
+    .contact-link {
+      transition: color 0.2s;
+    }
+    .contact-link:hover {
+      color: var(--fn) !important;
+    }
+    .contact-link svg {
+      transition: color 0.2s, stroke 0.2s;
+    }
+    .contact-link:hover svg {
+      color: var(--fn) !important;
+      stroke: var(--fn) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== Jupyter chrome ==================== -->
+  <div class="menubar">
+    <div class="app">
+      <div class="logo"></div> PrajasLabs
+    </div>
+    <a class="menu" href="mailto:prajas.wadekar@research.iiit.ac.in">Email</a>
+    <a class="menu" href="https://github.com/prajas-wadekar" target="_blank" rel="noopener">GitHub</a>
+    <a class="menu" href="https://www.linkedin.com/in/prajas-wadekar-41847b1b0/" target="_blank"
+      rel="noopener">LinkedIn</a>
+    <a class="menu" href="https://scholar.google.com/citations?user=wGlLH8IAAAAJ&hl=en" target="_blank"
+      rel="noopener">Scholar</a>
+    <div class="spacer"></div>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to dark mode"
+      title="Switch to dark mode">
+      <span class="theme-icon" aria-hidden="true"></span>
+    </button>
+    <div class="kernel" id="kernel"><span class="kdot"></span> <span id="kernel-label">prajas_kernel · idle</span></div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tab"><span class="notebook-icon">[N]</span> prajas.ipynb <span class="dot">●</span></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="btn" title="Save">💾</div>
+    <div class="btn" title="Add cell" id="tb-add">+</div>
+    <div class="sep"></div>
+    <div class="btn" title="Cut">✂</div>
+    <div class="btn" title="Delete cell" id="tb-delete">🗑</div>
+    <div class="btn" title="Copy">❏</div>
+    <div class="btn" title="Paste">▤</div>
+    <div class="sep"></div>
+    <div class="btn" title="Move Up" id="tb-up">↑</div>
+    <div class="btn" title="Move Down" id="tb-down">↓</div>
+    <div class="btn" title="Run selected (Shift+Enter)" id="tb-run">▶</div>
+    <div class="btn" title="Stop">■</div>
+    <div class="btn" title="Restart kernel" id="tb-restart">↻</div>
+    <div class="btn" title="Run all" id="tb-runall">⏩</div>
+    <div class="celltype">
+      Code <span style="color:var(--faint)">▾</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="hint">
+      <kbd>Shift</kbd>+<kbd>Enter</kbd> run &amp; advance · <kbd>⌘</kbd>/<kbd>Ctrl</kbd>+<kbd>Enter</kbd> run &amp; stay
+      · try <code style="font-family:var(--mono)">prajas.help()</code>
+    </div>
+  </div>
+
+  <!-- ==================== Main layout ==================== -->
+  <div class="page">
+    <aside class="sidebar">
+      <div class="idcard">
+        <div class="name">Prajas Wadekar</div>
+        <div class="role">B.Tech & M.Sc. in Computer Science Engineering @ <a href="https://www.iiit.ac.in/" target="_blank"
+            rel="noopener">IIIT Hyderabad</a></div>
+        <div class="links">
+          <a href="mailto:prajas.wadekar@research.iiit.ac.in">email</a>
+          <a href="https://github.com/prajas-wadekar" target="_blank" rel="noopener">github</a>
+          <a href="https://www.linkedin.com/in/prajas-wadekar-41847b1b0/" target="_blank" rel="noopener">linkedin</a>
+          <a href="https://scholar.google.com/citations?user=wGlLH8IAAAAJ&hl=en" target="_blank"
+            rel="noopener">scholar</a>
+          <a href="assets/Prajas_Wadekar.pdf" target="_blank" rel="noopener">cv</a>
+        </div>
+      </div>
+      <div class="side-head">Table of Contents</div>
+      <div id="toc"></div>
+    </aside>
+
+    <main class="nb" id="nb">
+      <div class="nb-inner" id="nb-inner"><!-- cells injected --></div>
+    </main>
+  </div>
+
+  <!-- Status bar -->
+  <div class="statusbar">
+    <span>Python 3 (prajas_kernel)</span>
+    <span class="sep">|</span>
+    <span id="sb-cell">Cell 1 of 0</span>
+    <span class="sep">|</span>
+    <span class="mode" id="sb-mode">COMMAND</span>
+    <span class="sep">|</span>
+    <span id="sb-save">saved</span>
+    <span class="spacer" style="flex:1"></span>
+    <span>Ln 1, Col 1</span>
+    <span class="sep">|</span>
+    <span>UTF-8</span>
+  </div>
+
+  <div class="add-menu" id="add-menu" aria-hidden="true">
+    <button type="button" data-kind="code">Code cell <span class="kind">python</span></button>
+    <button type="button" data-kind="md">Markdown cell <span class="kind">md</span></button>
+  </div>
+
+  <!-- Help popover -->
+  <div class="help show" id="help">
+    <div class="x" id="help-x">✕</div>
+    <strong>Type <code>prajas.help()</code> in a new cell</strong><br />
+    <kbd>Shift</kbd>+<kbd>Enter</kbd> run &amp; advance<br />
+    <kbd>⌘</kbd>/<kbd>Ctrl</kbd>+<kbd>Enter</kbd> run &amp; stay<br />
+    <kbd>↑</kbd> / <kbd>↓</kbd> move between cells<br />
+  </div>
+
+  <script src="assets/garden-posts.js"></script>
+  <script>
+    // ==========================================================
+    // "prajas" API — renders outputs
+    // ==========================================================
+    const DATA = {
+      bio: "Hi, I'm Prajas! I am currently pursuing my B.Tech and M.Sc. in Computer Science at <a href=\"https://www.iiit.ac.in/\" target=\"_blank\" rel=\"noopener\">IIIT Hyderabad</a>. I work as an Undergraduate Researcher in the Machine Learning Lab, focusing on the adversarial robustness of 3D novel view synthesis methods like Gaussian Splatting. Outside of computer vision and robust AI, I enjoy building scalable software systems and search engines. Feel free to run <code>prajas.help()</code> to explore!",
+      interests: [
+        {
+          key: "adversarial_robustness",
+          desc: "Defending 3D and 4D Gaussian Splatting architectures against dataset poisoning."
+        },
+        {
+          key: "information_retrieval",
+          desc: "Building custom search engines with TAAT/DAAT query execution."
+        },
+        {
+          key: "systems_engineering",
+          desc: "Architecting distributed file systems and highly concurrent RESTful APIs."
+        },
+      ],
+      papers: [
+        {
+          id: 0, year: 2026, title: "PatchPoison: Poisoning Multi-View Datasets to Degrade 3D Reconstruction",
+          authors: "P. Wadekar, V. S. P. Bachina, K. Bhosikar, A. Gangwal, C. Sharma",
+          venue: "CVPR Workshop on SPAR-3D, 2026", award: "",
+          summary: "Proposed a lightweight adversarial patch framework targeting the feature-matching stage of SfM pipelines. Demonstrated that injecting a minimal 12×12 pixel checkerboard patch increases reconstruction error (LPIPS) by 6.8× on the NeRF-Synthetic benchmark while remaining visually imperceptible.",
+          arxiv: "https://arxiv.org/abs/2604.13153",
+          github: "https://github.com/PrajasW/patch-poison",
+          selected: true
+        },
+      ],
+      experienceConcise: [
+        {
+          when: "May 2025 - Present",
+          role: "Undergraduate Researcher",
+          org: "Machine Learning Lab, IIIT Hyderabad",
+          advisor: "Advisor: Dr. Charu Sharma",
+          summary: "Researching adversarial robustness of 3D novel view synthesis methods."
+        },
+        {
+          when: "Jan 2025 - Apr 2025",
+          role: "Software Engineering Intern",
+          org: "Eklavya Foundation",
+          summary: "Led a small development team to architect and deploy a custom LMS supporting 2,000+ active students and faculty."
+        }
+      ],
+      experienceDetailed: [
+        {
+          when: "May 2025 - Present",
+          role: "Undergraduate Researcher",
+          org: "Machine Learning Lab, IIIT Hyderabad",
+          advisor: "Advisor: Dr. Charu Sharma",
+          bullets: [
+            "Investigated adversarial robustness in 3D novel view synthesis, identifying specific vulnerabilities within 3D and 4D Gaussian Splatting architectures.",
+            "Designed and executed performance-degradation attacks on 3D reconstruction pipelines, establishing baseline vulnerability metrics for secure Gaussian Splatting evaluation."
+          ]
+        },
+        {
+          when: "Jan 2025 - Apr 2025",
+          role: "Software Engineering Intern",
+          org: "Eklavya Foundation",
+          bullets: [
+            "Led a development team to engineer and deploy a custom Learning Management System (LMS) across multiple NGO institutions, successfully scaling the platform for over 2,000 active students and faculty.",
+            "Designed a secure backend infrastructure utilizing MongoDB and 15+ RESTful API endpoints, implementing Google OAuth and 3-tier Role-Based Access Control (RBAC) to manage concurrent dashboard access."
+          ]
+        }
+      ],
+      projects: [
+        {
+          shortName: "FIRE",
+          title: "Fast Information Retrieval Engine",
+          link: "https://github.com/PrajasW/fire",
+          tech: "Python, PostgreSQL, Redis, FastAPI, TF-IDF/BM25",
+          summary: "Engineered a full-text search engine over a 1M+ document corpus (Wikipedia/Webz.io), achieving 4,943 QPS.",
+          bullets: [
+            "Engineered a full-text search engine over a 1M+ document corpus spanning Wikipedia and Webz.io data, building custom positional inverted indexes with TAAT/DAAT query execution for Boolean, phrase, and TF-IDF ranking.",
+            "Accelerated query throughput by 99.1% (2,483 to 4,943 QPS) and cut p95 latency over 50% (to 0.31ms) by devising positional skip pointers and posting-list compression, benchmarked across Redis, PostgreSQL, and Elasticsearch."
+          ]
+        },
+        {
+          shortName: "ESPER",
+          title: "Insurance Claim Analysis System",
+          link: "https://github.com/PrajasW/ESPER-Insurance-Claim-Analysis-System",
+          tech: "Python, Flask, YOLOv8, MySQL, CLIP",
+          summary: "Automated AI claims pipeline fine-tuning YOLOv8 across 17 vehicle-damage classes and fusing CLIP embeddings to flag fraudulent photos.",
+          bullets: [
+            "Developed an automated AI claims pipeline, fine-tuning YOLOv8 across 17 vehicle-damage classes and fusing CLIP embeddings with Error Level Analysis (ELA) to flag fraudulent photos at 74% detection accuracy.",
+            "Deployed a scalable Flask and MySQL web application to process concurrent high-resolution image uploads, dynamically generating standardized PDF claim reports in under 3 seconds."
+          ]
+        },
+        {
+          shortName: "NFS",
+          title: "Distributed Network File System",
+          link: "https://github.com/PrajasW/nfs",
+          tech: "C, POSIX Threads, TCP/UDP Sockets, Distributed Systems",
+          summary: "Multithreaded distributed file system via TCP/IP utilizing POSIX threads and automatic replication.",
+          bullets: [
+            "Built a multithreaded distributed file system via TCP/IP (Naming and Storage Servers), utilizing POSIX threads and reader-writer locks to manage concurrent client access and enable reliable audio file streaming.",
+            "Cut file-lookup latency via Trie-based routing and an LRU cache, and ensured high availability through 3x automatic replication with sub-second server failover."
+          ]
+        },
+        {
+          shortName: "My-Shell",
+          title: "Unix-style Shell in C",
+          link: "https://github.com/PrajasW/my-shell",
+          tech: "C, POSIX, Linux",
+          summary: "Built a Unix-style shell in C supporting process management, multi-stage piping, and background execution.",
+          bullets: [
+            "Built a Unix-style shell in C using POSIX system calls (fork, exec, wait) to implement process management, recursive-descent command parsing, and interactive job control.",
+            "Integrated core functionalities including multi-stage piping (|), I/O redirection (>, <), and background execution (&), alongside an extensible architecture supporting 10+ custom commands."
+          ]
+        },
+        {
+          shortName: "GeoVision",
+          title: "Geo-Localization from Campus Imagery",
+          link: "https://github.com/PrajasW/GeoVision",
+          tech: "PyTorch, ConvNeXt, ResNet, EfficientNet, Python",
+          summary: "Captured a custom dataset and trained PyTorch models to predict GPS coordinates and camera angles from campus imagery with >90% accuracy.",
+          bullets: [
+            "Captured and curated a custom geo-localization dataset by photographing 15 campus regions across three distinct time periods, then trained models to predict GPS coordinates and camera angle from images.",
+            "Evaluated ResNet, EfficientNet, and ConvNeXt architectures on multi-task regression and classification, applying robust preprocessing to exceed 90% accuracy across all classification tasks."
+          ]
+        }
+      ],
+      hackathons: [
+          {
+            shortName: "HackIIIT 2026",
+            title: "Best Hardware Project",
+            link: "https://www.osdg.in/hackiiit2026",
+            org: "OSDG, IIIT Hyderabad | Team: Santas And Their Elves",
+            when: "Jan 2026",
+            summary: "Project: Developed an MVP to solve unpredictable campus canteen wait times and availability.",
+            bullets: [
+              "Solution: Engineered a hardware-software integration featuring a physical ON/OFF switch synced with an app-based pre-ordering system to display real-time canteen status.",
+              "Impact: Streamlined the ordering process by ensuring orders are only accepted when canteens are operational, minimizing crowding, reducing wait times, and preventing wasted trips for students."
+            ]
+          },
+          {
+            shortName: "Lloyds 2025",
+            title: "Top 10 Finalist",
+            org: "Lloyds IP & I Hackathon on Agentic AI",
+            when: "Dec 2025",
+            link: "https://github.com/Neir-Classification/Llyod-Hackathon",
+            summary: "Project: Developed an Agentic AI solution for automating insurance claim voice calls using agentic pipelines.",
+            bullets: [
+              "Focus: Leveraged autonomous AI agents to break down and execute multi-step workflows, showcasing innovation in the evolving landscape of intelligent banking and enterprise AI."
+            ]
+          },
+          {
+            shortName: "Megathon 2025",
+            title: "Top 5 Finalist",
+            org: "E-Cell IIIT Hyderabad & CHUBB",
+            when: "Oct 2025",
+            link: "https://github.com/PrajasW/ESPER-Insurance-Claim-Analysis-System",
+            summary: "Project: ESPER Insurance Claim Analysis System. Tackled the Chubb problem statement by building a robust system for analyzing and processing insurance claims.",
+            bullets: [
+              "Impact: Placed in the top 5 out of a massive pool of over 1,100 innovators and 62 colleges by pitching a high-viability prototype to an expert panel of industry leaders."
+            ]
+          }
+        ],
+      askAnswers: {
+        "what do you do offline?": "When I'm not coding, I enjoy exploring new music, watching sci-fi films, playing chess, and going on long walks around campus. I also like tinkering with hardware projects and 3D printing.",
+        "what's in your tech stack?": "I primarily work with Python, C/C++, and JavaScript. For ML I use PyTorch and scikit-learn. For web development I use React, Node.js, and Express. I'm also comfortable with Docker, Linux systems programming, and PostgreSQL.",
+        "how was your research study on Event Segmentation Theory?": "It was a fascinating deep dive into how humans perceive boundaries between events in continuous experience. The study explored computational models that attempt to replicate this cognitive process, and it gave me a deeper appreciation for how perception and memory interact at a fundamental level."
+      },
+      hobbies: [
+          {
+            title: "Electric Guitar",
+            description: "Playing the electric guitar just well enough to entertain myself (and hopefully not annoy my neighbors)."
+          },
+          {
+            title: "Anime",
+            description: "Watching (and probably talking) way too much about anime."
+          },
+          {
+            title: "Poker",
+            description: "Playing competitive poker for the love of the strategy and statistics."
+          }
+        ],
+      education: [
+        {
+          degree: "B.Tech & M.Sc. in Computer Science",
+          institution: "International Institute of Information Technology, Hyderabad (IIIT-H)",
+          duration: "2024 - 2028"
+        }
+      ],
+    };
+
+    // ==========================================================
+    // OUTPUT RENDERERS
+    // ==========================================================
+    function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+    function renderText(txt) {
+      const d = document.createElement('div');
+      d.className = 'out-text';
+      d.textContent = txt;
+      return d;
+    }
+
+    function renderAbout() {
+      const wrap = document.createElement('div');
+      wrap.className = 'about-card';
+      wrap.innerHTML = `
+    <img class="avatar-large" src="assets/profile.png" alt="Prajas Wadekar" />
+    <div class="about-copy">
+      <div class="obj">&lt;prajas.About object at 0x7fc2a0&gt;</div>
+      <p>${DATA.bio}</p>
+    </div>
+  `;
+      return wrap;
+    }
+
+    function renderInterests() {
+      const wrap = document.createElement('div');
+      const dict = document.createElement('div');
+      dict.className = 'interest-dict';
+      DATA.interests.forEach((interest) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+      <div class="key">"${interest.key}"</div>
+      <div class="value">
+        <div class="text">${escapeHTML(interest.desc)}</div>
+      </div>
+    `;
+        dict.appendChild(row);
+      });
+      wrap.appendChild(dict);
+      return wrap;
+    }
+
+    function renderHobbies() {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = `<ul class="bullets" style="margin: 0; padding-left: 20px; list-style-position: outside; color: var(--ink);">` + 
+        DATA.hobbies.map(h => `<li style="margin-bottom: 12px; font-family: var(--sans); font-size: 14px; line-height: 1.6;">
+          <strong style="color: var(--fn); font-weight: 600;">${escapeHTML(h.title)}:</strong> <span style="color: var(--muted);">${escapeHTML(h.description)}</span>
+        </li>`).join('') + `</ul>`;
+      return wrap;
+    }
+
+    function renderEducation() {
+      const wrap = document.createElement('div');
+      const list = document.createElement('div');
+      list.className = 'experience-list';
+      list.innerHTML = DATA.education.map(ed => `
+    <div class="experience-entry">
+      <div class="when">${escapeHTML(ed.duration)}</div>
+      <div>
+        <p class="role">${escapeHTML(ed.degree)}</p>
+        <p class="org">${escapeHTML(ed.institution)}</p>
+        ${ed.description ? `<p class="summary">${escapeHTML(ed.description)}</p>` : ''}
+      </div>
+    </div>
+  `).join('');
+      wrap.appendChild(list);
+      return wrap;
+    }
+
+    function renderPapers(detailed) {
+      const rows = DATA.papers.filter(p => p.selected);
+      const wrap = document.createElement('div');
+
+      const list = document.createElement('div');
+      list.className = 'paper-list';
+      list.innerHTML = rows.map((p) => `
+    <div class="paper-item">
+      <div class="when" style="font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 1px;">${p.year}</div>
+      <div>
+        <div style="display:flex; justify-content:space-between; gap:16px;">
+          <p class="title">${escapeHTML(p.title)}</p>
+          <div style="display:flex; gap:12px; margin-top:2px;">
+            ${p.arxiv ? `<a href="${p.arxiv}" target="_blank" rel="noopener" style="color:var(--muted);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></a>` : ''}
+            ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener" style="color:var(--muted);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>` : ''}
+          </div>
+        </div>
+        <p class="authors">${escapeHTML(p.authors)}</p>
+        <p class="venue">${escapeHTML(p.venue)}${p.award ? ` <span class="award">${escapeHTML(p.award)}</span>` : ''}</p>
+        ${(detailed && p.summary) ? `<p class="summary" style="margin-top:6px;font-size:13.5px;line-height:1.6;color:var(--ink)">${escapeHTML(p.summary)}</p>` : ''}
+      </div>
+    </div>
+  `).join('');
+      wrap.appendChild(list);
+      return wrap;
+    }
+
+    function renderExperience(detailed) {
+      const wrap = document.createElement('div');
+      const items = detailed ? DATA.experienceDetailed : DATA.experienceConcise;
+      const list = document.createElement('div');
+      list.className = 'experience-list';
+      list.innerHTML = items.map((e) => `
+    <div class="experience-entry">
+      <div class="when">${escapeHTML(e.when)}</div>
+      <div>
+        <p class="role">${escapeHTML(e.role)}</p>
+        <p class="org">${escapeHTML(e.org)}</p>
+        ${e.advisor ? `<p class="advisor">${escapeHTML(e.advisor)}</p>` : ''}
+        ${e.summary ? `<p class="summary" style="margin-bottom: ${e.bullets ? '8px' : '0'};">${escapeHTML(e.summary)}</p>` : ''}
+        ${e.bullets ? `<ul style="margin: 0; padding-left: 20px;">${e.bullets.map(b => `<li style="font-size: 13.5px; line-height: 1.6; margin-bottom: 6px;">${escapeHTML(b)}</li>`).join('')}</ul>` : ''}
+      </div>
+    </div>
+  `).join('');
+      wrap.appendChild(list);
+      return wrap;
+    }
+
+    function renderProjects(detailed) {
+      const wrap = document.createElement('div');
+      const list = document.createElement('div');
+      list.className = 'experience-list';
+      list.innerHTML = DATA.projects.map((p) => `
+    <div class="experience-entry project-entry">
+      <div class="when" style="font-family: monospace; font-size: 0.8rem; letter-spacing: 0.12em; opacity: 0.55; padding-top: 2px;">${escapeHTML(p.shortName)}</div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <p class="role">${escapeHTML(p.title)}</p>
+          ${p.link ? `<a href="${p.link}" class="github-link" target="_blank" rel="noopener" style="display:flex;align-items:center; color: var(--muted); opacity: 0.6; transition: opacity 0.2s; margin-top: 2px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>` : ''}
+        </div>
+        ${p.tech ? `<div class="tech-stack" style="margin:4px 0 6px;">${p.tech.split(',').map(t => `<span class="tech-badge">${escapeHTML(t.trim())}</span>`).join('')}</div>` : ''}
+        ${!detailed ? `<p class="summary">${escapeHTML(p.summary)}</p>` : ''}
+        ${detailed && p.bullets ? `<ul class="bullets">${p.bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}</ul>` : ''}
+      </div>
+    </div>
+  `).join('');
+      wrap.appendChild(list);
+      return wrap;
+    }
+
+    function renderHackathons(detailed) {
+      const wrap = document.createElement('div');
+      const list = document.createElement('div');
+      list.className = 'experience-list';
+      list.innerHTML = DATA.hackathons.map((h) => `
+    <div class="experience-entry">
+      <div class="when">${escapeHTML(h.shortName)}</div>
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <p class="role">${escapeHTML(h.title)}</p>
+          ${h.link ? `<a href="${h.link}" class="github-link" target="_blank" rel="noopener" style="display:flex;align-items:center;margin-top:2px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>` : ''}
+        </div>
+        <p class="org" style="margin-bottom:2px;">${escapeHTML(h.org)}</p>
+        <p class="advisor" style="margin-bottom:6px;">${escapeHTML(h.when)}</p>
+        ${!detailed && h.summary ? `<p class="summary">${escapeHTML(h.summary)}</p>` : ''}
+        ${detailed ? (h.summary ? `<p class="summary">${escapeHTML(h.summary)}</p>` : '') + (h.bullets ? `<ul class="bullets">${h.bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}</ul>` : '') : ''}
+      </div>
+    </div>
+  `).join('');
+      wrap.appendChild(list);
+      return wrap;
+    }
+
+    function renderAskButtons() {
+      const wrap = document.createElement('div');
+      const questions = Object.keys(DATA.askAnswers);
+      const container = document.createElement('div');
+      container.className = 'agent-box';
+      container.style.whiteSpace = 'normal';
+      questions.forEach((q) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = q;
+        btn.style.cssText = 'display:block;width:100%;text-align:left;border:1px solid var(--rule);background:var(--panel-soft);color:var(--ink);font:inherit;font-size:13px;padding:10px 12px;border-radius:6px;cursor:pointer;margin-bottom:6px;';
+        const answer = document.createElement('div');
+        answer.style.cssText = 'display:none;padding:8px 12px;font-size:13px;line-height:1.6;color:var(--muted);border-left:2px solid var(--selected);margin:4px 0 10px 4px;';
+        answer.textContent = DATA.askAnswers[q];
+        btn.onclick = () => {
+          answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+        };
+        container.appendChild(btn);
+        container.appendChild(answer);
+      });
+      wrap.appendChild(container);
+      return wrap;
+    }
+
+    // ----- Contact -----
+    function renderContact() {
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'font-family:var(--sans); font-size:14px; line-height:1.8; color: var(--ink); margin-left: 2px;';
+      wrap.innerHTML = `
+    <div style="font-weight:600; font-size: 16px; margin-bottom:4px; color: var(--ink);">Prajas Wadekar</div>
+    <div style="color:var(--muted); font-size:13px; margin-bottom:12px;">IIIT Hyderabad, India</div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <a href="mailto:prajas.wadekar@research.iiit.ac.in" style="display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none;" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--faint);"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        prajas.wadekar@research.iiit.ac.in
+      </a>
+      <a href="https://x.com/prajaspw" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none;" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--faint);"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+        x.com/prajaspw
+      </a>
+      <a href="https://www.linkedin.com/in/prajas-wadekar-41847b1b0/" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none;" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--faint);"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        LinkedIn
+      </a>
+      <a href="https://scholar.google.com/citations?user=wGlLH8IAAAAJ&hl=en" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:10px; color:var(--ink); text-decoration:none;" class="contact-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--faint);"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+        Google Scholar
+      </a>
+    </div>
+  `;
+      return wrap;
+    }
+
+    // ----- Help -----
+    function renderHelp() {
+      const wrap = document.createElement('div');
+      wrap.className = 'out-text';
+      wrap.innerHTML = `<span style="color:var(--muted)">prajas</span> — a personal kernel.
+
+<span style="color:var(--kw)">Profile + technical work</span>
+  prajas.about()                     &nbsp;→ bio
+  prajas.education()                 &nbsp;→ academic background
+  prajas.experience(detailed=False)  &nbsp;→ concise experience
+  prajas.publications()              &nbsp;→ selected publications
+  prajas.projects()                  &nbsp;→ technical and academic projects
+  prajas.hackathons()                &nbsp;→ hackathon achievements
+  prajas.hobbies()                   &nbsp;→ personal hobbies
+  prajas.contact()                   &nbsp;→ contact card
+
+<span style="color:var(--kw)">Notebook actions</span>
+  Shift+Enter                        &nbsp;→ run selected cell
+  Cmd/Ctrl+Enter                     &nbsp;→ run and stay
+  ↑ / ↓                              &nbsp;→ move between cells
+
+<span style="color:var(--muted)">If you restart the kernel, run</span> <span style="color:var(--fn)">import prajas</span> <span style="color:var(--muted)">again first.</span>`;
+      return wrap;
+    }
+    function renderToolFromCall(toolCall) {
+      if (/^prajas\.about\(\s*\)$/.test(toolCall)) return renderAbout();
+      if (/^prajas\.education\(\s*\)$/.test(toolCall)) return renderEducation();
+      if (/^prajas\.hobbies\(\s*\)$/.test(toolCall)) return renderHobbies();
+      if (/^prajas\.contact\(\s*\)$/.test(toolCall)) return renderContact();
+      if (/^prajas\.projects\(\s*\)$/.test(toolCall)) return renderProjects();
+      if (/^prajas\.hackathons\(\s*\)$/.test(toolCall)) return renderHackathons();
+
+      const pm = toolCall.match(/^prajas\.publications\s*\(\s*(?:selected\s*=\s*(True|False))?\s*\)$/);
+      if (pm) return renderPapers(pm[1] !== 'False');
+
+      const em = toolCall.match(/^prajas\.experience\s*\(\s*(?:detailed\s*=\s*(True|False))?\s*\)$/);
+      if (em) return renderExperience(em[1] === 'True');
+
+      return null;
+    }
+    async function renderAgent(outEl, prompt, isCurrent) {
+      if (isCurrent && !isCurrent()) return;
+      outEl.replaceChildren();
+      const r = agentAnswer(prompt);
+      const hostCell = outEl.closest('.cell');
+      const cellIdx = hostCell ? CELLS.findIndex(c => c.id === hostCell.dataset.id) : -1;
+      const renderableTools = r.tools.map((t) => ({ tool: t, node: renderToolFromCall(t) })).filter((x) => x.node);
+      const box = document.createElement('div');
+      box.className = 'agent-box';
+      outEl.appendChild(box);
+      const textSpan = document.createElement('span');
+      box.appendChild(textSpan);
+      const caret = document.createElement('span');
+      caret.className = 'caret';
+      box.appendChild(caret);
+
+      for (let i = 0; i < r.text.length; i += 3) {
+        if (isCurrent && !isCurrent()) return;
+        textSpan.textContent += r.text.slice(i, i + 3);
+        await sleep(4);
+      }
+      caret.remove();
+      if (renderableTools.length) {
+        const detailRow = document.createElement('div');
+        detailRow.className = 'detail-row';
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'detail-toggle';
+        toggle.textContent = 'show details';
+        let open = false;
+        let renderedOnce = false;
+        const results = document.createElement('div');
+        results.className = 'agent-results';
+        results.style.display = 'none';
+        toggle.onclick = async () => {
+          open = !open;
+          toggle.textContent = open ? 'hide details' : 'show details';
+          if (!renderedOnce) {
+            for (const entry of renderableTools) {
+              const tool = document.createElement('span');
+              tool.className = 'tool';
+              tool.innerHTML = `<span class="tk">opening</span> → ${escapeHTML(entry.tool)}`;
+              results.appendChild(tool);
+              const wrap = document.createElement('div');
+              wrap.className = 'agent-render';
+              wrap.appendChild(entry.node);
+              results.appendChild(wrap);
+            }
+            renderedOnce = true;
+          }
+          results.style.display = open ? 'grid' : 'none';
+        };
+        detailRow.appendChild(toggle);
+        box.appendChild(detailRow);
+        outEl.appendChild(results);
+      }
+      if (r.suggestions?.length) {
+        const suggestions = document.createElement('div');
+        suggestions.className = 'suggestions';
+        r.suggestions.forEach((suggestion) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = suggestion;
+          button.onclick = () => {
+            if (cellIdx >= 0) setAskPromptAndRun(cellIdx, suggestion);
+          };
+          suggestions.appendChild(button);
+        });
+        box.appendChild(suggestions);
+      }
+      if (r.links?.length) {
+        const links = document.createElement('div');
+        links.className = 'links';
+        r.links.forEach((link) => {
+          const a = document.createElement('a');
+          a.href = link.href;
+          a.textContent = link.label;
+          if (link.external) {
+            a.target = '_blank';
+            a.rel = 'noopener';
+          }
+          links.appendChild(a);
+        });
+        box.appendChild(links);
+      }
+    }
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // ==========================================================
+    // CODE EXECUTION — very small pretend interpreter
+    // ==========================================================
+    function renderImportError() {
+      return renderText(`NameError: name 'prajas' is not defined\n→ run import prajas first`);
+    }
+
+    function execCode(code, outEl, isCurrent) {
+      outEl.replaceChildren();
+      const src = code.replace(/#.*$/gm, '').trim();
+
+      if (/import\s+prajas/.test(src)) {
+        KERNEL_IMPORTED = true;
+        scheduleNotebookSave();
+        const remainder = src.replace(/import\s+prajas\s*/g, '').trim();
+        if (!remainder) {
+          outEl.appendChild(renderText('# kernel loaded prajas v1.0   (try prajas.help())'));
+          return;
+        }
+        return execCode(remainder, outEl, isCurrent);
+      }
+
+      if (!KERNEL_IMPORTED && /prajas\./.test(src)) {
+        outEl.appendChild(renderImportError());
+        return;
+      }
+
+      if (/prajas\.help\(\s*\)/.test(src)) { outEl.appendChild(renderHelp()); return; }
+      if (/prajas\.about\(\s*\)/.test(src)) { outEl.appendChild(renderAbout()); return; }
+      if (/prajas\.education\(\s*\)/.test(src)) { outEl.appendChild(renderEducation()); return; }
+      if (/prajas\.hobbies\(\s*\)/.test(src)) { outEl.appendChild(renderHobbies()); return; }
+      const hm = src.match(/prajas\.hackathons\s*\(\s*(?:detailed\s*=\s*(True|False))?\s*\)/);
+        if (hm) { outEl.appendChild(renderHackathons(hm[1] === 'True')); return; }
+      if (/prajas\.contact\(\s*\)/.test(src)) { outEl.appendChild(renderContact()); return; }
+      if (/prajas\.ask\(\s*question\s*\)/.test(src)) { outEl.appendChild(renderAskButtons()); return; }
+
+      const proj = src.match(/prajas\.projects\s*\(\s*(?:detailed\s*=\s*(True|False))?\s*\)/);
+      if (proj) { outEl.appendChild(renderProjects(proj[1] === 'True')); return; }
+
+      const pm = src.match(/prajas\.publications\s*\(\s*(?:detailed\s*=\s*(True|False))?\s*\)/);
+      if (pm) { outEl.appendChild(renderPapers(pm[1] === 'True')); return; }
+
+      const em = src.match(/prajas\.experience\s*\(\s*(?:detailed\s*=\s*(True|False))?\s*\)/);
+      if (em) { outEl.appendChild(renderExperience(em[1] === 'True')); return; }
+
+      outEl.appendChild(renderText(`NameError: object not defined\n→ try prajas.help()`));
+    }
+
+    // ==========================================================
+    // Syntax highlight (tiny Python-ish) — single-pass tokenizer
+    // ==========================================================
+    function highlight(code) {
+      const KW = new Set(['import', 'from', 'as', 'def', 'return', 'if', 'else', 'for', 'in', 'True', 'False', 'None', 'and', 'or', 'not']);
+      const pattern = /(#[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|([=+\-*/<>!:,().\[\]])|(\s+)|([^\s])/g;
+      let out = '';
+      let m;
+      while ((m = pattern.exec(code)) !== null) {
+        if (m[1]) out += `<span class="tok-com">${escapeHTML(m[1])}</span>`;
+        else if (m[2]) out += `<span class="tok-str">${escapeHTML(m[2])}</span>`;
+        else if (m[3]) out += `<span class="tok-num">${escapeHTML(m[3])}</span>`;
+        else if (m[4]) {
+          const id = m[4];
+          const rest = code.slice(pattern.lastIndex);
+          const isCall = /^\s*\(/.test(rest);
+          if (KW.has(id)) out += `<span class="tok-kw">${id}</span>`;
+          else if (isCall) out += `<span class="tok-fn">${id}</span>`;
+          else out += escapeHTML(id);
+        }
+        else if (m[5]) out += `<span class="tok-op">${escapeHTML(m[5])}</span>`;
+        else if (m[6]) out += m[6]; // whitespace preserved
+        else if (m[7]) out += escapeHTML(m[7]);
+      }
+      return out;
+    }
+
+    // ==========================================================
+    // CELLS (create / render / run)
+    // ==========================================================
+    let CELLS = [];
+    let SELECTED = 0;
+    let EXEC_COUNTER = 0;
+    let KERNEL_IMPORTED = false;
+    const NOTEBOOK_STORAGE_KEY = 'prajas.ipynb.state.v1';
+    let SAVE_TIMER = null;
+
+    function makeCell({ type, content, sticky }) {
+      return { id: 'c' + Math.random().toString(36).slice(2, 8), type, content, sticky: !!sticky, editable: true, executed: 0 };
+    }
+
+    function readCodeEditorText(codeEl) {
+      if (!codeEl) return '';
+      const text = (codeEl.innerText || codeEl.textContent || '').replace(/\u00a0/g, ' ').replace(/\r/g, '');
+      return text.endsWith('\n') ? text.slice(0, -1) : text;
+    }
+
+    function snapshotActiveEditors() {
+      document.querySelectorAll('.cell').forEach((el, idx) => {
+        const c = CELLS[idx];
+        if (!c) return;
+        if (c.type === 'code') {
+          const codeEl = el.querySelector('.code-wrap');
+          if (codeEl) c.content = readCodeEditorText(codeEl);
+        } else {
+          const edit = el.querySelector('.md-edit');
+          if (edit && el.classList.contains('editing')) c.content = edit.value;
+        }
+      });
+    }
+
+    function serializeCells() {
+      return CELLS.map(c => ({
+        id: c.id,
+        type: c.type,
+        content: c.content,
+        sticky: !!c.sticky,
+        editable: c.editable !== false,
+        executed: Number.isFinite(c.executed) ? c.executed : 0,
+        outputHTML: c.outputHTML || ''
+      }));
+    }
+
+    function saveNotebookState() {
+      try {
+        localStorage.removeItem(NOTEBOOK_STORAGE_KEY);
+      } catch (_) { }
+    }
+
+    function scheduleNotebookSave() {
+      clearTimeout(SAVE_TIMER);
+    }
+
+    function loadNotebookState() {
+      try {
+        localStorage.removeItem(NOTEBOOK_STORAGE_KEY);
+      } catch (_) {
+      }
+      return null;
+    }
+
+    // Tiny markdown parser — headings, paragraphs, lists, inline bold/italic/code/link/image.
+    // If the content already looks like HTML (starts with '<'), it is passed through unchanged,
+    // so existing HTML markdown cells continue to work.
+    function renderMarkdown(src) {
+      if (!src) return '';
+      if (src.trim().startsWith('<')) return src;
+      const inline = (s) => s
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      const lines = src.split('\n');
+      let html = '', inPara = false, inList = false;
+      const closePara = () => { if (inPara) { html += '</p>'; inPara = false; } };
+      const closeList = () => { if (inList) { html += '</ul>'; inList = false; } };
+      for (const line of lines) {
+        const h = line.match(/^(#{1,6})\s+(.+)$/);
+        const li = line.match(/^[*\-]\s+(.+)$/);
+        if (h) { closePara(); closeList(); html += `<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`; continue; }
+        if (li) { closePara(); if (!inList) { html += '<ul>'; inList = true; } html += `<li>${inline(li[1])}</li>`; continue; }
+        if (!line.trim()) { closePara(); closeList(); continue; }
+        closeList();
+        if (!inPara) { html += '<p>'; inPara = true; } else html += ' ';
+        html += inline(line);
+      }
+      closePara(); closeList();
+      return html;
+    }
+
+    function buildInitial() {
+      CELLS = [
+        {
+          ...makeCell({
+            type: 'md', sticky: true, content: `
+      <h1>Prajas Wadekar</h1>
+      <div class="sub"><em>B.Tech & M.Sc. in Computer Science Engineering @ <a href="https://www.iiit.ac.in/" target="_blank" rel="noopener">IIIT Hyderabad</a></em></div>
+      <div class="id-row">
+        <div class="meta">
+
+          <div class="links-inline"><strong>Quick links</strong>:
+            <a href="mailto:prajas.wadekar@research.iiit.ac.in">email</a><span class="sep">·</span>
+            <a href="https://github.com/prajas-wadekar" target="_blank" rel="noopener">github</a><span class="sep">·</span>
+            <a href="https://www.linkedin.com/in/prajas-wadekar-41847b1b0/" target="_blank" rel="noopener">linkedin</a><span class="sep">·</span>
+            <a href="https://scholar.google.com/citations?user=wGlLH8IAAAAJ&hl=en" target="_blank" rel="noopener">scholar</a><span class="sep">·</span>
+            <a href="assets/Prajas_Wadekar.pdf" target="_blank" rel="noopener">cv</a>
+          </div>
+        </div>
+      </div>
+      <p>Hello and welcome! Feel free to explore around or use <code>prajas.help()</code> to see all the fun things you can do.</p>
+    `}), editable: false
+        },
+        makeCell({ type: 'code', content: 'import prajas\nprajas.about()' }),
+        { ...makeCell({ type: 'md', content: `## Education` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.education()' }),
+        { ...makeCell({ type: 'md', content: `## Experience` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.experience(detailed=False)' }),
+        { ...makeCell({ type: 'md', content: `## Publications` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.publications(detailed=False)' }),
+        { ...makeCell({ type: 'md', content: `## Projects` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.projects(detailed=False)' }),
+        { ...makeCell({ type: 'md', content: `## Hackathons` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.hackathons(detailed=False)' }),
+        { ...makeCell({ type: 'md', content: `## Hobbies & Free Time` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.hobbies()' }),
+        { ...makeCell({ type: 'md', content: `## Contact` }), editable: false },
+        makeCell({ type: 'code', content: 'prajas.contact()' }),
+      ];
+    }
+
+    function renderAll() {
+      const root = document.getElementById('nb-inner');
+      root.innerHTML = '';
+      CELLS.forEach((c, i) => {
+        if (i > 0) {
+          root.appendChild(renderInsertRail(i - 1, false));
+        }
+        root.appendChild(renderCell(c, i));
+      });
+      if (CELLS.length) root.appendChild(renderInsertRail(CELLS.length - 1, true));
+      refreshToc();
+      updateStatus();
+    }
+
+    function renderInsertRail(afterIdx, isLast = false) {
+      const rail = document.createElement('div');
+      rail.className = 'insert-rail' + (isLast ? ' last' : '');
+      const b = document.createElement('button');
+      b.textContent = '+';
+      b.title = isLast ? 'Append cell' : 'Insert cell';
+      b.onclick = (e) => {
+        e.stopPropagation();
+        openAddMenu(e.currentTarget, afterIdx);
+      };
+      rail.appendChild(b);
+      return rail;
+    }
+
+    function renderCell(c, idx) {
+      const el = document.createElement('div');
+      el.className = 'cell ' + c.type + (c.type === 'md' && c.editable === false ? ' locked' : '');
+      el.dataset.id = c.id;
+      el.onclick = () => selectCell(idx);
+
+      if (c.type === 'md') {
+        el.innerHTML = `
+      <div class="row">
+        <div class="prompt"></div>
+        <div>
+          <div class="md-body"></div>
+          <textarea class="md-edit" spellcheck="false"></textarea>
+        </div>
+      </div>`;
+        const body = el.querySelector('.md-body');
+        const edit = el.querySelector('.md-edit');
+        body.innerHTML = renderMarkdown(c.content);
+        edit.value = c.content;
+        if (c.editable !== false) {
+          body.addEventListener('dblclick', (e) => {
+            e.stopPropagation();
+            enterEdit(idx);
+          });
+          edit.addEventListener('input', () => {
+            c.content = edit.value;
+            edit.style.height = 'auto';
+            edit.style.height = Math.max(80, edit.scrollHeight + 4) + 'px';
+            scheduleNotebookSave();
+          });
+          edit.addEventListener('blur', () => exitEdit(idx, false));
+          edit.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.shiftKey) {
+              e.preventDefault(); e.stopPropagation();
+              exitEdit(idx, true);
+            } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+              e.preventDefault(); e.stopPropagation();
+              exitEdit(idx, false);
+            } else if (e.key === 'Escape') {
+              e.preventDefault(); e.stopPropagation();
+              exitEdit(idx, false);
+            }
+          });
+        }
+        return el;
+      }
+
+      // code cell
+      const inLabel = c.executed ? `In [${c.executed}]:` : `In [&nbsp;]:`;
+      el.innerHTML = `
+    <div class="row">
+      <div class="prompt in">${inLabel}</div>
+      <div>
+        <div class="cell-mobile-actions">
+          <span class="cell-kind">Code</span>
+          <button class="cell-run" type="button">Run</button>
+        </div>
+        <div class="code-wrap" contenteditable="true" spellcheck="false" autocapitalize="none" autocomplete="off" autocorrect="off"></div>
+        <div class="out-row">
+          <div class="prompt out">${c.executed ? 'Out[' + c.executed + ']:' : ''}</div>
+          <div class="out-wrap"></div>
+        </div>
+      </div>
+    </div>`;
+
+      const codeEl = el.querySelector('.code-wrap');
+      const outWrap = el.querySelector('.out-wrap');
+      const runBtn = el.querySelector('.cell-run');
+      codeEl.innerHTML = highlight(c.content);
+      runBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        c.content = readCodeEditorText(codeEl);
+        codeEl.blur();
+        triggerCell(idx, false);
+      });
+      codeEl.addEventListener('input', () => {
+        c.content = readCodeEditorText(codeEl);
+        scheduleNotebookSave();
+      });
+      codeEl.addEventListener('blur', () => {
+        const txt = readCodeEditorText(codeEl);
+        c.content = txt;
+        codeEl.innerHTML = highlight(txt);
+        scheduleNotebookSave();
+      });
+      codeEl.addEventListener('focus', () => {
+        codeEl.textContent = c.content;
+      });
+      codeEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && e.shiftKey) {
+          e.preventDefault(); e.stopPropagation();
+          codeEl.blur();
+          triggerCell(idx, true);
+        } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault(); e.stopPropagation();
+          codeEl.blur();
+          triggerCell(idx, false);
+        }
+      });
+      if (c.outputHTML) outWrap.innerHTML = c.outputHTML;
+
+      return el;
+    }
+
+    async function runCell(idx, advance) {
+      const c = CELLS[idx];
+      if (!c || c.type !== 'code') return;
+      if (c._running) return;                          // re-entrance guard
+      c._running = true;
+      const runId = (c._runId = (c._runId || 0) + 1);  // unique ticket per run
+      const isCurrent = () => c._runId === runId;      // stale async ops see false
+
+      // Look up DOM element by stable cell id, not array index
+      const el = document.querySelector(`.cell[data-id="${c.id}"]`);
+      if (!el) { c._running = false; return; }
+      const out = el.querySelector('.out-wrap');
+      const outPrompt = el.querySelector('.prompt.out');
+      const inPrompt = el.querySelector('.prompt.in');
+      const runBtn = el.querySelector('.cell-run');
+
+      el.classList.add('running');
+      if (runBtn) {
+        runBtn.disabled = true;
+        runBtn.textContent = 'Running';
+      }
+      setKernelBusy(true);
+      inPrompt.textContent = 'In [*]:';
+      out.replaceChildren();                           // hard reset, atomic
+
+      try {
+        const maybePromise = execCode(c.content, out, isCurrent);
+        if (maybePromise && typeof maybePromise.then === 'function') await maybePromise;
+      } catch (e) {
+        if (isCurrent()) out.appendChild(renderText('Error: ' + (e && e.message ? e.message : String(e))));
+      }
+
+      if (!isCurrent()) {
+        if (runBtn) {
+          runBtn.disabled = false;
+          runBtn.textContent = 'Run';
+        }
+        c._running = false;
+        return;
+      }
+
+      EXEC_COUNTER += 1;
+      c.executed = EXEC_COUNTER;
+      inPrompt.textContent = `In [${c.executed}]:`;
+      outPrompt.textContent = `Out[${c.executed}]:`;
+      c.outputHTML = out.innerHTML;
+      el.classList.remove('running');
+      if (runBtn) {
+        runBtn.disabled = false;
+        runBtn.textContent = 'Run';
+      }
+      setKernelBusy(false);
+      c._running = false;
+      scheduleNotebookSave();
+      if (advance && idx + 1 < CELLS.length) selectCell(idx + 1);
+    }
+
+    async function runAll() {
+      for (let i = 0; i < CELLS.length; i++) {
+        if (CELLS[i].type === 'code') await runCell(i, false);
+      }
+    }
+
+    // Run-or-render: works for both code and markdown cells.
+    // - code cell: runs the code, optionally advances.
+    // - md cell: if in edit mode, exits; optionally advances.
+    async function triggerCell(idx, advance) {
+      const c = CELLS[idx];
+      if (!c) return;
+      if (c.type === 'md') {
+        const el = document.querySelector(`.cell[data-id="${c.id}"]`);
+        if (el && el.classList.contains('editing')) exitEdit(idx, false);
+        if (advance && idx + 1 < CELLS.length) selectCell(idx + 1);
+        return;
+      }
+      // code cell
+      await runCell(idx, advance);
+    }
+
+    function enterEdit(idx) {
+      const c = CELLS[idx];
+      if (!c || c.type !== 'md' || c.editable === false) return;
+      const el = document.querySelector(`.cell[data-id="${c.id}"]`);
+      if (!el) return;
+      el.classList.add('editing');
+      selectCell(idx);
+      const edit = el.querySelector('.md-edit');
+      edit.value = c.content;
+      // size to content
+      edit.style.height = 'auto';
+      edit.style.height = Math.max(80, edit.scrollHeight + 4) + 'px';
+      edit.focus();
+      edit.setSelectionRange(edit.value.length, edit.value.length);
+    }
+
+    function exitEdit(idx, advance) {
+      const c = CELLS[idx];
+      if (!c || c.type !== 'md') return;
+      const el = document.querySelector(`.cell[data-id="${c.id}"]`);
+      if (!el) return;
+      const edit = el.querySelector('.md-edit');
+      const body = el.querySelector('.md-body');
+      c.content = edit.value;
+      body.innerHTML = renderMarkdown(c.content);
+      el.classList.remove('editing');
+      refreshToc();
+      scheduleNotebookSave();
+      if (advance && idx + 1 < CELLS.length) selectCell(idx + 1);
+    }
+
+    function selectCell(idx, opts = {}) {
+      const { scroll = true, behavior = 'smooth' } = opts;
+      SELECTED = idx;
+      document.querySelectorAll('.cell').forEach((el, i) => {
+        el.classList.toggle('selected', i === idx);
+      });
+      const el = document.querySelectorAll('.cell')[idx];
+      if (el && scroll) el.scrollIntoView({ block: 'nearest', behavior });
+      updateStatus();
+      scheduleNotebookSave();
+    }
+
+    function insertCellAfter(idx) {
+      CELLS.splice(idx + 1, 0, makeCell({ type: 'code', content: '# new cell' }));
+      renderAll();
+      selectCell(idx + 1);
+    }
+
+    function makeStarterCell(kind) {
+      if (kind === 'md') return makeCell({ type: 'md', content: '## New section\n\nWrite here.' });
+      return makeCell({ type: 'code', content: '# new cell' });
+    }
+
+    function insertNewCellAfter(idx, kind) {
+      CELLS.splice(idx + 1, 0, makeStarterCell(kind));
+      renderAll();
+      const newIdx = idx + 1;
+      selectCell(newIdx);
+      scheduleNotebookSave();
+      requestAnimationFrame(() => focusCellEditor(newIdx));
+    }
+
+    function focusCellEditor(idx) {
+      const c = CELLS[idx];
+      if (!c) return;
+      if (c.type === 'md') {
+        enterEdit(idx);
+        return;
+      }
+      const el = document.querySelector(`.cell[data-id="${c.id}"]`);
+      const codeEl = el && el.querySelector('.code-wrap');
+      if (codeEl) codeEl.focus();
+    }
+
+    function deleteCell(idx) {
+      if (idx < 0 || idx >= CELLS.length) return;
+      closeAddMenu();
+      CELLS.splice(idx, 1);
+      if (!CELLS.length) {
+        CELLS.push(makeStarterCell('code'));
+        renderAll();
+        selectCell(0);
+        scheduleNotebookSave();
+        requestAnimationFrame(() => focusCellEditor(0));
+        return;
+      }
+      renderAll();
+      const nextIdx = Math.min(idx, CELLS.length - 1);
+      selectCell(nextIdx);
+      scheduleNotebookSave();
+    }
+
+    function moveCellUp(idx) {
+      if (idx <= 0 || idx >= CELLS.length) return;
+      closeAddMenu();
+      const temp = CELLS[idx];
+      CELLS[idx] = CELLS[idx - 1];
+      CELLS[idx - 1] = temp;
+      renderAll();
+      selectCell(idx - 1);
+      scheduleNotebookSave();
+    }
+
+    function moveCellDown(idx) {
+      if (idx < 0 || idx >= CELLS.length - 1) return;
+      closeAddMenu();
+      const temp = CELLS[idx];
+      CELLS[idx] = CELLS[idx + 1];
+      CELLS[idx + 1] = temp;
+      renderAll();
+      selectCell(idx + 1);
+      scheduleNotebookSave();
+    }
+
+    let ADD_AFTER_INDEX = null;
+
+    function openAddMenu(anchorEl, afterIdx) {
+      const menu = document.getElementById('add-menu');
+      const rect = anchorEl.getBoundingClientRect();
+      ADD_AFTER_INDEX = afterIdx;
+      menu.style.left = `${Math.min(rect.left, window.innerWidth - 180)}px`;
+      menu.style.top = `${Math.min(rect.bottom + 8, window.innerHeight - 110)}px`;
+      menu.classList.add('show');
+      menu.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeAddMenu() {
+      const menu = document.getElementById('add-menu');
+      menu.classList.remove('show');
+      menu.setAttribute('aria-hidden', 'true');
+      ADD_AFTER_INDEX = null;
+    }
+
+    function refreshToc() {
+      const toc = document.getElementById('toc');
+      toc.innerHTML = '';
+      let n = 0;
+      CELLS.forEach((c, i) => {
+        if (c.type !== 'md') return;
+        let title = null;
+        const mdH = c.content.match(/^#{1,6}\s+(.+)$/m);
+        if (mdH) title = mdH[1];
+        else {
+          const htmlH = c.content.match(/<h[1-6][^>]*>([^<]+)<\/h[1-6]>/);
+          if (htmlH) title = htmlH[1];
+        }
+        if (!title) return;
+        n += 1;
+        const item = document.createElement('div');
+        item.className = 'toc-item';
+        item.innerHTML = `<span class="n">${String(n).padStart(2, '0')}</span> ${title}`;
+        item.onclick = () => selectCell(i);
+        toc.appendChild(item);
+      });
+    }
+
+    function updateStatus() {
+      document.getElementById('sb-cell').textContent = `Cell ${SELECTED + 1} of ${CELLS.length}`;
+      document.getElementById('sb-mode').textContent = document.activeElement && document.activeElement.classList.contains('code-wrap') ? 'EDIT' : 'COMMAND';
+    }
+
+    function setKernelBusy(b) {
+      const k = document.getElementById('kernel');
+      const lbl = document.getElementById('kernel-label');
+      if (b) { k.classList.add('busy'); lbl.textContent = 'prajas_kernel · busy'; }
+      else { k.classList.remove('busy'); lbl.textContent = 'prajas_kernel · idle'; }
+    }
+
+    // toolbar bindings
+    document.getElementById('tb-run').onclick = () => triggerCell(SELECTED, true);
+    document.getElementById('tb-runall').onclick = () => runAll();
+    document.getElementById('tb-restart').onclick = () => {
+      EXEC_COUNTER = 0;
+      KERNEL_IMPORTED = false;
+      CELLS.forEach(c => {
+        c.executed = 0;
+        c.outputHTML = '';
+      });
+      renderAll();
+      scheduleNotebookSave();
+      runAll();
+    };
+    document.getElementById('tb-add').onclick = (e) => {
+      e.stopPropagation();
+      openAddMenu(e.currentTarget, SELECTED);
+    };
+    document.getElementById('tb-delete').onclick = () => deleteCell(SELECTED);
+    document.getElementById('tb-up').onclick = () => moveCellUp(SELECTED);
+    document.getElementById('tb-down').onclick = () => moveCellDown(SELECTED);
+    document.getElementById('help-x').onclick = () => document.getElementById('help').classList.remove('show');
+    setTimeout(() => document.getElementById('help').classList.remove('show'), 5000);
+
+    document.getElementById('add-menu').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-kind]');
+      if (!btn || ADD_AFTER_INDEX === null) return;
+      insertNewCellAfter(ADD_AFTER_INDEX, btn.dataset.kind);
+      closeAddMenu();
+    });
+
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('add-menu');
+      if (!menu.classList.contains('show')) return;
+      if (e.target.closest('#add-menu') || e.target.closest('#tb-add') || e.target.closest('.insert-rail button')) return;
+      closeAddMenu();
+    });
+
+    // keyboard (command mode only — per-cell handlers handle edit mode)
+    window.addEventListener('keydown', (e) => {
+      const ae = document.activeElement;
+      const inEdit = ae && (ae.classList.contains('code-wrap') || ae.classList.contains('md-edit'));
+      if (e.key === 'Escape') {
+        closeAddMenu();
+        if (inEdit) return;
+      }
+      if (inEdit) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); selectCell(Math.min(SELECTED + 1, CELLS.length - 1)); return; }
+      if (e.key === 'ArrowUp') { e.preventDefault(); selectCell(Math.max(SELECTED - 1, 0)); return; }
+      if (e.key === 'Enter' && e.shiftKey) { e.preventDefault(); triggerCell(SELECTED, true); return; }
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); triggerCell(SELECTED, false); return; }
+      if (e.key === 'Enter') {
+        // plain Enter in command mode = enter edit mode on selected cell
+        const c = CELLS[SELECTED];
+        if (!c) return;
+        e.preventDefault();
+        if (c.type === 'md') {
+          if (c.editable !== false) enterEdit(SELECTED);
+        }
+        else {
+          const el = document.querySelector(`.cell[data-id="${c.id}"]`);
+          const codeEl = el && el.querySelector('.code-wrap');
+          if (codeEl) codeEl.focus();
+        }
+      }
+    });
+    document.addEventListener('focusin', updateStatus);
+    document.addEventListener('focusout', updateStatus);
+    window.addEventListener('scroll', scheduleNotebookSave, { passive: true });
+    window.addEventListener('pagehide', saveNotebookState);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') saveNotebookState();
+    });
+
+    // boot
+    const restoredNotebook = loadNotebookState();
+    if (restoredNotebook) {
+      CELLS = restoredNotebook.cells;
+      EXEC_COUNTER = restoredNotebook.execCounter;
+      KERNEL_IMPORTED = restoredNotebook.kernelImported;
+      renderAll();
+      selectCell(restoredNotebook.selected, { scroll: false });
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: restoredNotebook.scrollY, behavior: 'auto' });
+      });
+    } else {
+      (async () => {
+        KERNEL_IMPORTED = true;
+        buildInitial();
+        renderAll();
+        // auto-run every code cell once so info is visible immediately
+        for (let i = 0; i < CELLS.length; i++) {
+          if (CELLS[i].type === 'code') {
+            await runCell(i, false);
+          }
+        }
+        selectCell(1);
+        saveNotebookState();
+      })();
+    }
+  </script>
+</body>
+
+</html>
