@@ -2460,7 +2460,7 @@
         <p class="org">${escapeHTML(e.org)}</p>
         ${e.advisor ? `<p class="advisor">${escapeHTML(e.advisor)}</p>` : ''}
         ${e.summary ? `<p class="summary" style="margin-bottom: ${e.bullets ? '8px' : '0'};">${escapeHTML(e.summary)}</p>` : ''}
-        ${e.bullets ? `<ul style="margin: 0; padding-left: 20px;">${e.bullets.map(b => `<li style="font-size: 13.5px; line-height: 1.6; margin-bottom: 6px;">${escapeHTML(b)}</li>`).join('')}</ul>` : ''}
+        ${e.bullets ? `<div style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">${e.bullets.map(b => `<p class="summary" style="margin: 0;">${escapeHTML(b)}</p>`).join('')}</div>` : ''}
       </div>
     </div>
   `).join('');
@@ -2482,7 +2482,7 @@
         </div>
         ${p.tech ? `<div class="tech-stack" style="margin:4px 0 6px;">${p.tech.split(',').map(t => `<span class="tech-badge">${escapeHTML(t.trim())}</span>`).join('')}</div>` : ''}
         ${!detailed ? `<p class="summary">${escapeHTML(p.summary)}</p>` : ''}
-        ${detailed && p.bullets ? `<ul class="bullets">${p.bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}</ul>` : ''}
+        ${detailed && p.bullets ? `<div style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">${p.bullets.map(b => `<p class="summary" style="margin: 0;">${escapeHTML(b)}</p>`).join('')}</div>` : ''}
       </div>
     </div>
   `).join('');
@@ -2505,7 +2505,7 @@
         <p class="org" style="margin-bottom:2px;">${escapeHTML(h.org)}</p>
         <p class="advisor" style="margin-bottom:6px;">${escapeHTML(h.when)}</p>
         ${!detailed && h.summary ? `<p class="summary">${escapeHTML(h.summary)}</p>` : ''}
-        ${detailed ? (h.summary ? `<p class="summary">${escapeHTML(h.summary)}</p>` : '') + (h.bullets ? `<ul class="bullets">${h.bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}</ul>` : '') : ''}
+        ${detailed ? (h.summary ? `<p class="summary">${escapeHTML(h.summary)}</p>` : '') + (h.bullets ? `<div style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">${h.bullets.map(b => `<p class="summary" style="margin: 0;">${escapeHTML(b)}</p>`).join('')}</div>` : '') : ''}
       </div>
     </div>
   `).join('');
