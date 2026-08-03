@@ -447,13 +447,71 @@
       border: 1px solid transparent;
       border-left: 3px solid transparent;
       border-radius: 3px;
-      padding: 4px 12px 4px 0;
+      padding: 4px 90px 4px 0;
       transition: border-color .15s ease, background-color .15s ease;
     }
 
     .cell.selected {
       border-color: var(--selected);
       background: var(--selected-soft);
+    }
+
+    /* Per-cell action buttons — always in layout, visibility-toggled */
+    .cell-actions {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      z-index: 5;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .15s ease, visibility .15s ease;
+    }
+
+    .cell.selected .cell-actions {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .cell-actions .cell-act-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 24px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--faint);
+      cursor: pointer;
+      padding: 0;
+      transition: all .12s ease;
+    }
+
+    .cell-actions .cell-act-btn:hover {
+      background: var(--hover);
+      border-color: var(--rule);
+      color: var(--ink);
+    }
+
+    .cell-actions .cell-act-btn.delete:hover {
+      background: rgba(211, 47, 47, 0.08);
+      border-color: rgba(211, 47, 47, 0.2);
+      color: #d32f2f;
+    }
+
+    .cell-actions .cell-act-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .cell.running {
@@ -1783,6 +1841,20 @@
         display: none;
       }
 
+      .cell-actions {
+        position: relative;
+        top: auto;
+        right: auto;
+        justify-content: flex-end;
+        padding: 4px 6px 2px;
+      }
+
+      .cell.selected .cell-actions {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
       .cell-mobile-actions {
         display: flex;
         align-items: center;
@@ -2865,8 +2937,23 @@
       el.dataset.id = c.id;
       el.onclick = () => selectCell(idx);
 
+      // Per-cell action buttons (move up, move down, delete)
+      const actionsHTML = `
+      <div class="cell-actions">
+        <button class="cell-act-btn move-up" type="button" title="Move cell up">
+          <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
+        <button class="cell-act-btn move-down" type="button" title="Move cell down">
+          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <button class="cell-act-btn delete" type="button" title="Delete cell">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      </div>`;
+
       if (c.type === 'md') {
         el.innerHTML = `
+      ${actionsHTML}
       <div class="row">
         <div class="prompt"></div>
         <div>
@@ -2903,12 +2990,28 @@
             }
           });
         }
+
+        // Wire up per-cell action buttons for md cells
+        el.querySelector('.cell-act-btn.move-up').addEventListener('click', (e) => {
+          e.stopPropagation();
+          moveCellUp(idx);
+        });
+        el.querySelector('.cell-act-btn.move-down').addEventListener('click', (e) => {
+          e.stopPropagation();
+          moveCellDown(idx);
+        });
+        el.querySelector('.cell-act-btn.delete').addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteCell(idx);
+        });
+
         return el;
       }
 
       // code cell
       const inLabel = c.executed ? `In [${c.executed}]:` : `In [&nbsp;]:`;
       el.innerHTML = `
+    ${actionsHTML}
     <div class="row">
       <div class="prompt in">${inLabel}</div>
       <div>
@@ -2960,6 +3063,20 @@
         }
       });
       if (c.outputHTML) outWrap.innerHTML = c.outputHTML;
+
+      // Wire up per-cell action buttons
+      el.querySelector('.cell-act-btn.move-up').addEventListener('click', (e) => {
+        e.stopPropagation();
+        moveCellUp(idx);
+      });
+      el.querySelector('.cell-act-btn.move-down').addEventListener('click', (e) => {
+        e.stopPropagation();
+        moveCellDown(idx);
+      });
+      el.querySelector('.cell-act-btn.delete').addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteCell(idx);
+      });
 
       return el;
     }
@@ -3086,15 +3203,21 @@
       scheduleNotebookSave();
     }
 
+    function deselectAll() {
+      SELECTED = -1;
+      document.querySelectorAll('.cell.selected').forEach(el => el.classList.remove('selected'));
+      updateStatus();
+    }
+
     function insertCellAfter(idx) {
-      CELLS.splice(idx + 1, 0, makeCell({ type: 'code', content: '# new cell' }));
+      CELLS.splice(idx + 1, 0, makeCell({ type: 'code', content: '' }));
       renderAll();
       selectCell(idx + 1);
     }
 
     function makeStarterCell(kind) {
       if (kind === 'md') return makeCell({ type: 'md', content: '## New section\n\nWrite here.' });
-      return makeCell({ type: 'code', content: '# new cell' });
+      return makeCell({ type: 'code', content: '' });
     }
 
     function insertNewCellAfter(idx, kind) {
@@ -3244,10 +3367,17 @@
     });
 
     document.addEventListener('click', (e) => {
+      // Close add-menu if open
       const menu = document.getElementById('add-menu');
-      if (!menu.classList.contains('show')) return;
-      if (e.target.closest('#add-menu') || e.target.closest('#tb-add') || e.target.closest('.insert-rail button')) return;
-      closeAddMenu();
+      if (menu.classList.contains('show')) {
+        if (!e.target.closest('#add-menu') && !e.target.closest('#tb-add') && !e.target.closest('.insert-rail button')) {
+          closeAddMenu();
+        }
+      }
+      // Deselect cells when clicking outside any cell
+      if (!e.target.closest('.cell') && !e.target.closest('.toolbar') && !e.target.closest('.sidebar') && !e.target.closest('.menubar') && !e.target.closest('.tabbar') && !e.target.closest('#add-menu') && !e.target.closest('.insert-rail') && !e.target.closest('.statusbar')) {
+        deselectAll();
+      }
     });
 
     // keyboard (command mode only — per-cell handlers handle edit mode)
